@@ -1,0 +1,7 @@
+import std;
+
+struct vector3 ( u8 var1, i32 var2 );
+
+vector3::function_name(u8 input)(u8 output) {
+    io::print("Shelly!");
+}
