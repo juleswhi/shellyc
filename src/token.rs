@@ -6,8 +6,7 @@ use std::thread::current;
 pub enum Token {
     Import(ImportType),
     Struct(String),
-    EOF,
-    IDENTIFIER,
+    Identifier,
     LParen,
     RParen,
     LCurly,
@@ -17,6 +16,8 @@ pub enum Token {
     Question,
     Colon,
     Semicolon,
+    Space,
+    EOF,
 }
 
 pub enum ImportType {
@@ -35,7 +36,7 @@ impl Lexer {
         Lexer {
             tokens: Vec::new(),
             source,
-            current: 0
+            current: 0,
         }
     }
 }
@@ -46,7 +47,7 @@ impl Lexer {
             println!("Current {}", self.current() as char);
 
             if let None = self.consume(Token::EOF) {
-                break
+                break;
             }
         }
     }
@@ -55,12 +56,22 @@ impl Lexer {
         self.source.as_bytes()[self.current]
     }
 
+    fn next(&mut self) -> Option<u8> {
+        if self.current + 1 >= self.source.len() {
+            return None;
+        }
+
+        self.current += 1;
+
+        Some(self.source.as_bytes()[self.current])
+    }
+
     fn peek(&self) -> Option<u8> {
         if self.current + 1 >= self.source.len() {
             return None;
         }
 
-        Some(self.source.as_bytes()[self.current+1])
+        Some(self.source.as_bytes()[self.current + 1])
     }
 
     fn consume(&mut self, token: Token) -> Option<()> {
@@ -74,4 +85,22 @@ impl Lexer {
 
         Some(())
     }
+
+    fn parse_char(&self) -> Option<Token> {
+        match self.source.as_bytes()[self.current] as char {
+            '{' => Some(Token::LCurly),
+            '}' => Some(Token::RCurly),
+            '(' => Some(Token::LParen),
+            ')' => Some(Token::RParen),
+            ';' => Some(Token::Semicolon),
+            ':' => Some(Token::Colon),
+            '!' => Some(Token::Exclam),
+            '?' => Some(Token::Question),
+            '"' => Some(Token::Quotation),
+            ' ' => Some(Token::Space),
+            _ => None,
+        }
+    }
+
+    fn parse_identifier(ch: u8) {}
 }
