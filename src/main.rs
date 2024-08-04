@@ -1,4 +1,6 @@
+use token::Lexer;
+
 mod token;
-fn main() {
-    token::Lexer::lex(String::new())
+pub fn main() {
+    _ = Lexer::from("import std".into()).lex();
 }

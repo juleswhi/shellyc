@@ -7,3 +7,8 @@
 </div>
 
 
+## Todo
+
+- Design Language
+- Lexer
+- Parser { AST }
