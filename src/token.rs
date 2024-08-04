@@ -1,6 +1,22 @@
-#[allow(dead_code)]
+#![allow(dead_code)]
+#![allow(unused)]
+
+use std::thread::current;
+
 pub enum Token {
-    Import(ImportType)
+    Import(ImportType),
+    Struct(String),
+    EOF,
+    IDENTIFIER,
+    LParen,
+    RParen,
+    LCurly,
+    RCurly,
+    Quotation,
+    Exclam,
+    Question,
+    Colon,
+    Semicolon,
 }
 
 pub enum ImportType {
@@ -27,9 +43,18 @@ impl Lexer {
 impl Lexer {
     pub fn lex(&mut self) {
         loop {
+            println!("Current {}", self.current() as char);
 
+            if let None = self.consume(Token::EOF) {
+                break
+            }
         }
     }
+
+    fn current(&self) -> u8 {
+        self.source.as_bytes()[self.current]
+    }
+
     fn peek(&self) -> Option<u8> {
         if self.current + 1 >= self.source.len() {
             return None;
